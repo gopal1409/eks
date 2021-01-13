@@ -1,0 +1,22 @@
+#we apply the same using kubectl apply -f deploy.yaml
+apiVersion: apps/v1 #it will start taking to the kubernets api called as apps/v1
+kind: Deployment #it will invoke deployment api
+metadata:
+  name: nginx-deployment #once it invoke the deployment api it has to do something(it will create a deployment with the name)
+  labels: #what is this label is all about
+    app: nginx #all the pod it is going to launch will label with this 
+spec:
+  replicas: 3 #it will create three different pod
+  selector:
+    matchLabels: #going to be mapped using match value
+      app: nginx
+  template: #this is also called as deployment template what will my deploymetn will do
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
