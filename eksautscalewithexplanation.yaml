@@ -1,0 +1,51 @@
+# when i run this script eksctl command
+#any yaml script run from top to bottom and left to right
+apiVersion: eksctl.io/v1alpha5 #it will invoke the kubernete api
+kind: ClusterConfig #in that api we are saying do a cluster configuration
+metadata:
+  name: gopal-cluster #which cluster configuration need to be done
+  region: us-east-2 #in which region the cluster is there
+nodeGroups: # we are configuring our nodes
+  - name: scale-east2a #this is the node group which need to added
+    instanceType: t2.micro #this will launch t3 large instance
+    desiredCapacity: 1 #we are launching 1 server
+    maxSize: 10 #this will be my max capacity
+    availabilityZones: ["us-east-2a"] #this server should be launched in a particualr data center in aws
+    iam:
+      withAddonPolices:
+        autoscaler: true
+    labels: #once the server is being launched we want to label the same
+      nodegroup-type: stateful-east2a #this will be the label of our instance
+      instanceType: onDemand #it should launch an on demand instance
+    ssh: #once the server is being launch 
+      publicKeyName: dockergopal #this is the keypair which will be attached with my instance
+  - name: scale-east2b
+    instanceType: t2.micro
+    desiredCapacity: 1
+    maxSize: 10
+    availabilityZones: ["us-east-2b"]
+    iam:
+      withAddonPolices:
+        autoscaler: true
+    labels:
+      nodegroup-type: stateful-east2b 
+      instanceType: onDemand
+    ssh:
+      publicKeyName: dockergopal
+  - name: scale-spot
+    desiredCapacity: 1
+    maxSize: 10
+    instanceDistribution:
+      instanceTypes: ["t2.small","t3.small"]
+      onDemandBaseCapacity: 0
+      onDemandPercentageAboveBaseCapacity: 0
+    availabilityZones: ["us-east-2a","us-east-2b","us-east-2c"]
+    iam:
+      withAddonPolices:
+        autoscaler: true
+    labels:
+      nodegroup-type: stateful-workload
+      instanceType: spot
+    ssh:
+      publicKeyName: dockergopal
+availabilityZones: ["us-east-2a","us-east-2b","us-east-2c"] 
