@@ -1,0 +1,20 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: gopal-cluster 
+  region: us-east-2
+managedNodeGroups:
+- name: gdnode
+  instanceType: t2.small
+  desiredCapacity: 3
+  ssh:
+    publicKeyName: dockergopal
+- name: gd-mixed
+  minSize: 3
+  maxSize: 5
+  instanceDistribution:
+    maxPrice: 0.2
+    instanceType: ["t2.small","t3.small"]
+    onDemandPercentageAboveBaseCapacity: 50
+  ssh:
+    publicKeyName: dockergopal  
