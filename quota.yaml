@@ -1,0 +1,10 @@
+apiVersion: v1 
+kind: ResourceQuota #it will invoke resourcequota api
+metadata: 
+  name: mem-cpu-demo #this is the name of the quota
+spec: #specification about the quota
+  hard: #this will provide you with hard limit
+    requests.cpu: "1" #any container can request 1 core cpu
+    requests.memory: 1Gi #the container should not use more than this much mem
+    limits.cpu: "2"
+    limits.memory: 2Gi
